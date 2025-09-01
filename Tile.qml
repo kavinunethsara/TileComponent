@@ -30,6 +30,8 @@ Item {
 
     z: 1000
 
+    activeFocusOnTab: true
+
     Component.onCompleted: {
         let tileInfo = controller.tiles.find((tile) => tile.plugin == root.model.plugin)
         root.config = new Utils.TileData(root, tileInfo.defaults)
@@ -148,6 +150,27 @@ Item {
             prevItem = item
         }
     }
+
+    //Keyboard focus indicator
+    Rectangle {
+        visible: activeFocus
+        color: Kirigami.Theme.highlightColor
+        opacity: 0.4
+    }
+
+    Keys.onReturnPressed: {
+        if (root.controller.editMode){
+            root.openEditor();
+            return
+        }
+        if (root.internalTile.activate) {
+            root.internalTile.activate(mouse)
+            if (root.toggleOnActivate)
+                controller.toggled()
+        }
+    }
+
+    Keys.onMenuPressed: root.showContextMenu(model.index);
 
     HoverOutlineEffect {
         anchors.fill: parent
