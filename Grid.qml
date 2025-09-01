@@ -1,7 +1,7 @@
 /*
- SPDX-FileCopyrightText: 2024 Kavinu Nethsara <kavinunethsarakoswattage@gmail.com>
- SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ * SPDX-FileCopyrightText: 2024 Kavinu Nethsara <kavinunethsarakoswattage@gmail.com>
+ * SPDX-License-Identifier: LGPL-2.1-or-later
+ */
 
 import QtQuick
 import QtQuick.Layouts
@@ -222,11 +222,11 @@ Item {
             var item = root.itemModel.get(i);
             list.push({
                 metadata: JSON.parse(item.metadata),
-                plugin: item.plugin,
-                tileWidth: item.tileWidth,
-                tileHeight: item.tileHeight,
-                column: item.column,
-                row: item.row,
+                      plugin: item.plugin,
+                      tileWidth: item.tileWidth,
+                      tileHeight: item.tileHeight,
+                      column: item.column,
+                      row: item.row,
             });
         }
         return list;
@@ -278,7 +278,11 @@ Item {
     function loadTiles() {
         initialLoad = true
         itemModel.clear()
+
         var items = JSON.parse(plasmoid.configuration.tiles);
+        // HACK tiles needs to be sorted so they have proper tab order
+        items = items.sort((a,b) => parseInt(a.row.toString() + a.column.toString()) - parseInt(b.row.toString() + b.column.toString()))
+
         items.forEach((item) => {
             itemModel.append({ grid: grid, controller: root, metadata: JSON.stringify(item.metadata), plugin: item.plugin, tileWidth: item.tileWidth, tileHeight: item.tileHeight, column: item.column, row: item.row });
         });

@@ -1,6 +1,6 @@
 /*
- SPDX-FileCopyrightText: 2025 Kavinu Nethsara <kavinunethsarakoswattage@gmail.com>
- SPDX-License-Identifier: LGPL-2.1-or-later
+ * SPDX-FileCopyrightText: 2025 Kavinu Nethsara <kavinunethsarakoswattage@gmail.com>
+ * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
 import QtQuick
@@ -43,7 +43,7 @@ Item {
         if (tileContent.status == Component.Ready) {
             var intTile = tileContent.createObject(root, {
                 metadata: Qt.binding(function() { return root.config }),
-                container: root
+                                                   container: root
             } );
             internalTile = intTile
         }
@@ -110,14 +110,14 @@ Item {
                     for (let i =0; i < controller.itemModel.count; i++) {
                         if (root.index  == i) continue // Skip if its the same tile
 
-                        let tempElem = controller.itemModel.get(i)
-                        let verticallyInside = tempElem.row >= row + root.model.tileHeight
-                        let horizontallyInside = tempElem.column >= col && tempElem.column < col + root.model.tileWidth
+                            let tempElem = controller.itemModel.get(i)
+                            let verticallyInside = tempElem.row >= row + root.model.tileHeight
+                            let horizontallyInside = tempElem.column >= col && tempElem.column < col + root.model.tileWidth
 
-                        if (verticallyInside && horizontallyInside) {
-                            controller.itemModel.get(i).row += (root.model.row - row)
-                            controller.itemModel.get(i).column += (root.model.column - col)
-                        }
+                            if (verticallyInside && horizontallyInside) {
+                                controller.itemModel.get(i).row += (root.model.row - row)
+                                controller.itemModel.get(i).column += (root.model.column - col)
+                            }
                     }
                 }
             } else {
@@ -132,9 +132,9 @@ Item {
         drag.onActiveChanged:  {
             if (mouseArea.drag.active)
                 root.controller.dragMode = true
-            else {
-                root.controller.dragMode = false
-            }
+                else {
+                    root.controller.dragMode = false
+                }
         }
 
         onMouseXChanged: function(mouse) { mouseArea.move(mouse) }
@@ -144,18 +144,11 @@ Item {
             var loc = root.grid.mapFromItem(root.controller.tileContainer, root.x, root.y)
             var item = root.grid.childAt(loc.x, loc.y)
             if (!item) return
-            if (prevItem)
-                prevItem.current = false
-            item.current = true
-            prevItem = item
+                if (prevItem)
+                    prevItem.current = false
+                    item.current = true
+                    prevItem = item
         }
-    }
-
-    //Keyboard focus indicator
-    Rectangle {
-        visible: activeFocus
-        color: Kirigami.Theme.highlightColor
-        opacity: 0.4
     }
 
     Keys.onReturnPressed: {
@@ -164,13 +157,26 @@ Item {
             return
         }
         if (root.internalTile.activate) {
-            root.internalTile.activate(mouse)
+            root.internalTile.activate({
+                button: Qt.LeftButton
+            })
             if (root.toggleOnActivate)
                 controller.toggled()
         }
     }
 
     Keys.onMenuPressed: root.showContextMenu(model.index);
+
+    //Keyboard focus indicator
+    Rectangle {
+        visible: root.activeFocus
+        anchors.fill: parent
+        anchors.margins: Kirigami.Units.smallSpacing
+
+        color: Kirigami.Theme.highlightColor
+        opacity: 0.4
+        z: 2
+    }
 
     HoverOutlineEffect {
         anchors.fill: parent
@@ -223,7 +229,7 @@ Item {
     function expandView() {
         const tileInfo = controller.tiles.find((tile) => tile.plugin == root.model.plugin)
         if (!tileInfo.expandedView) return
-        var expansion = Qt.createComponent(tileInfo.path + "/" + tileInfo.expandedView);
+            var expansion = Qt.createComponent(tileInfo.path + "/" + tileInfo.expandedView);
         if (expansion.status === Component.Ready) {
             const tileOpts = {
                 tile: root,
