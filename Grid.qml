@@ -18,9 +18,12 @@ pragma ComponentBehavior: Bound
 Item {
     id: root
     anchors.fill: parent
+    property Editor sidebar: sidebar_item
+
     property double gridHeight: grid.implicitHeight
     property int minRows: 0
     property int count: 0
+
     property ListModel itemModel: ListModel {
         onDataChanged: {
             refreshItems();
@@ -48,7 +51,7 @@ Item {
 
     // Editor Sidebar
     Editor {
-        id: sidebar
+        id: sidebar_item
 
         anchors {
             top: root.top
@@ -103,6 +106,8 @@ Item {
             target: gridContainer
             running: false
         }
+
+
 
         ScrollView {
             id: scroll
