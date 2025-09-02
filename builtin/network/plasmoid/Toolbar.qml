@@ -231,4 +231,17 @@ RowLayout {
             KCMUtils.KCMLauncher.openSystemSettings(root.kcm)
         }
     }
+
+    PlasmaComponents3.ToolButton {
+
+        icon.name: "gtk-close"
+
+        PlasmaComponents3.ToolTip {
+            text: i18n("Close Window")
+        }
+
+        onClicked: {
+            root.destroy()
+        }
+    }
 }
