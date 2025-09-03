@@ -19,6 +19,7 @@ Item {
     id: root
     anchors.fill: parent
     property Editor sidebar: sidebar_item
+    property bool invisibleScrollbars: false
 
     property double gridHeight: grid.implicitHeight
     property int minRows: 0
@@ -114,6 +115,8 @@ Item {
             anchors.fill: parent
             contentWidth: grid.implicitWidth
             contentHeight: grid.implicitHeight
+
+            ScrollBar.vertical.policy: (root.invisibleScrollbars) ? ScrollBar.AlwaysOff : ScrollBar.AsNeeded
 
             function getNewIndex(): int {
                 root.count += 1
