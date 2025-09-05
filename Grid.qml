@@ -206,6 +206,7 @@ Item {
         tiles: root.tiles
         controller: root
         errorDialog: errorDialog
+        onGetTiles: root.getTiles()
     }
 
     ErrorDialog {

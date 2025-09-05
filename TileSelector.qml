@@ -23,6 +23,8 @@ Kirigami.Dialog {
     required property ErrorDialog errorDialog
     property point position: Qt.point(0, 0)
 
+    signal getTiles
+
     property var installer: Plasma5Support.DataSource {
         engine: "executable"
         connectedSources: []
@@ -47,6 +49,7 @@ Kirigami.Dialog {
             const scriptUrl = Qt.resolvedUrl("../scripts/tileInstaller.py").toString().replace("file://", "")
             let path = file.replace("file://", "")
             root.installer.connectSource("python3 '" + scriptUrl+ "' '"+path+"'")
+            root.getTiles()
         }
     }
 
