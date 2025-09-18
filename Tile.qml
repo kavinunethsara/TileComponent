@@ -46,6 +46,8 @@ Item {
                                                    container: root
             } );
             internalTile = intTile
+        } else {
+            console.log("Error loading tile", root.model.plugin , " :", tileContent.errorString());
         }
 
     }
@@ -223,6 +225,8 @@ Item {
                 })
             }
             root.controller.openEditor(conf, tileOpts);
+        } else {
+            console.log("Error loading tile editor FOR", root.model.plugin , " :", conf.errorString());
         }
     }
 
@@ -238,6 +242,8 @@ Item {
                 })
             }
             root.controller.expanded(expansion, tileOpts);
+        } else {
+            console.log("Error loading expanded view FOR", root.model.plugin , " :", expansion.errorString());
         }
     }
 }
