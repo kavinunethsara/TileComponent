@@ -17,8 +17,8 @@ Item {
     property var grid: model.grid
     property bool toggleOnActivate: true
 
-    property variant config: {}
-    property variant tileData: {}
+    property variant config: null
+    property variant tileData: ({})
     property QtObject internalTile: Item{}
 
     property alias hover: mouseArea.containsMouse
@@ -54,11 +54,17 @@ Item {
 
     // Sync changes from old API to new one
     onTileDataChanged: {
-        if (root.tileData) {
-            root.config.metadata = root.tileData
-            root.configChanged()
-            root.model.metadata = JSON.stringify(root.tileData)
-        }
+        sync()
+    }
+
+    function sync () {
+        if (!root.tileData) return
+
+        root.config.metadata = root.tileData
+        root.model.metadata = JSON.stringify(root.tileData)
+        let tileInfo = controller.tiles.find((tile) => tile.plugin == root.model.plugin)
+        root.config = new Utils.TileData(root, tileInfo.defaults)
+        // root.configChanged()
     }
 
     MouseArea {
