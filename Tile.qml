@@ -104,8 +104,8 @@ Item {
             // Need to reset row and column ensure that position will be updated
             var col = root.model.column;
             var row = root.model.row;
-            root.model.column = 0
-            root.model.row = 0
+            root.model.column = -1
+            root.model.row = -1
 
             // Only move or activate if on a valid tile block
             if (item) {
@@ -152,10 +152,10 @@ Item {
             var loc = root.grid.mapFromItem(root.controller.tileContainer, root.x, root.y)
             var item = root.grid.childAt(loc.x, loc.y)
             if (!item) return
-                if (prevItem)
-                    prevItem.current = false
-                    item.current = true
-                    prevItem = item
+            if (prevItem)
+                prevItem.current = false
+            item.current = true
+            prevItem = item
         }
     }
 
