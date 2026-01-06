@@ -11,7 +11,7 @@ import org.kde.plasma.components as PlasmaComponents
 import org.kde.kirigami as Kirigami
 
 import org.kde.plasma.plasma5support as Plasma5Support
-
+import '../scripts/util.js' as Utils
 
 pragma ComponentBehavior: Bound
 
@@ -24,6 +24,10 @@ Item {
     property double gridHeight: grid.implicitHeight
     property int minRows: 0
     property int count: 0
+
+    property int currentRow: 0
+    property int currentColumn: 0
+    property var navigationGrid: []
 
     property ListModel itemModel: ListModel {
         onDataChanged: {
@@ -213,6 +217,60 @@ Item {
         id: errorDialog
     }
 
+    Keys.onReleased: event => {
+        if (event.key === Qt.Key_Right) {
+            const item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: 0, col: 1 })
+            if (item) {
+                item.value.forceActiveFocus()
+                currentColumn = item.col
+                currentRow = item.row
+            }
+        }
+
+        if (event.key === Qt.Key_Left) {
+            const item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: 0, col: -1 })
+            if (item) {
+                item.value.forceActiveFocus()
+                currentColumn = item.col
+                currentRow = item.row
+            }
+        }
+
+        if (event.key === Qt.Key_Up) {
+            let item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: -1, col: 0 })
+            if (!item)
+                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: -1, col: -1 })
+            if (!item)
+                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: -1, col: -2 })
+            if (!item)
+                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: -1, col: 1 })
+            if (!item)
+                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: -1, col: 2 })
+            if (item) {
+                item.value.forceActiveFocus()
+                currentColumn = item.col
+                currentRow = item.row
+            }
+        }
+
+        if (event.key === Qt.Key_Down) {
+            let item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: 1, col: 0 })
+            if (!item)
+                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: 1, col: 1 })
+            if (!item)
+                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: 1, col: 2 })
+            if (!item)
+                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: 1, col: -1 })
+            if (!item)
+                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: 1, col: -2 })
+            if (item) {
+                item.value.forceActiveFocus()
+                currentColumn = item.col
+                currentRow = item.row
+            }
+        }
+    }
+
     function updateGrid() {
         var rows = Math.floor(grid.children.length / grid.columns)
         var row = 0
@@ -222,6 +280,26 @@ Item {
             root.refreshItems()
 
             root.minRows = row
+        }
+
+        updateNavigationGrid()
+    }
+
+    function updateNavigationGrid() {
+        const tiles = tileBody.children.filter(child => child.hasOwnProperty("tileData"))
+        navigationGrid = []
+
+        for (var i=0; i < tiles.length; i++) {
+            const item = tiles[i]
+            const row = item.model.row
+            const column = item.model.column
+            if (navigationGrid[row]) {
+                navigationGrid[row][column] = item
+            } else {
+                navigationGrid[row] = []
+                navigationGrid[row][column] = item
+            }
+            navigationGrid = [...navigationGrid].map(item => item ? item : [])
         }
     }
 

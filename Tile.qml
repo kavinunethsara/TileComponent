@@ -47,9 +47,18 @@ Item {
             } );
             internalTile = intTile
         } else {
-            console.log("Error loading tile", root.model.plugin , " :", tileContent.errorString());
+            console.error("Error loading tile", root.model.plugin , " :", tileContent.errorString());
         }
 
+    }
+
+    onActiveFocusChanged: {
+        if (!activeFocus) return
+        const item = controller.navigationGrid[model.row][model.column]
+        if (item) {
+            controller.currentColumn = model.column
+            controller.currentRow = model.row
+        }
     }
 
     // Sync changes from old API to new one
@@ -132,6 +141,11 @@ Item {
                 // Reset the position if not in a valid grid cell
                 root.model.column = col;
                 root.model.row = row;
+            }
+
+            if (root.activeFocus) {
+                controller.currentColumn = root.model.column
+                controller.currentRow = root.model.row
             }
 
             controller.updateGrid();
