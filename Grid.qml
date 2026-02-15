@@ -217,7 +217,9 @@ Item {
         id: errorDialog
     }
 
-    Keys.onReleased: event => {
+    Keys.onPressed: event => handleKeys(event)
+
+    function handleKeys(event) {
         if (event.key === Qt.Key_Right) {
             const item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: 0, col: 1 })
             if (item) {
@@ -238,14 +240,10 @@ Item {
 
         if (event.key === Qt.Key_Up) {
             let item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: -1, col: 0 })
-            if (!item)
-                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: -1, col: -1 })
-            if (!item)
-                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: -1, col: -2 })
-            if (!item)
-                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: -1, col: 1 })
-            if (!item)
-                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: -1, col: 2 })
+            for (let i in [-1,-2,1,2]) {
+                if (item) break;
+                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: -1, col: i })
+            }
             if (item) {
                 item.value.forceActiveFocus()
                 currentColumn = item.col
@@ -255,14 +253,10 @@ Item {
 
         if (event.key === Qt.Key_Down) {
             let item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: 1, col: 0 })
-            if (!item)
-                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: 1, col: 1 })
-            if (!item)
-                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: 1, col: 2 })
-            if (!item)
-                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: 1, col: -1 })
-            if (!item)
-                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: 1, col: -2 })
+            for (let i in [-1,-2,1,2]) {
+                if (item) break;
+                item = Utils.findClosestInDirection(navigationGrid, currentRow, currentColumn, { row: 1, col: i })
+            }
             if (item) {
                 item.value.forceActiveFocus()
                 currentColumn = item.col
