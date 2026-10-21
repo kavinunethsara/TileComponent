@@ -71,6 +71,14 @@ FormCard.FormCardPage {
         }
 
         FormCard.FormSwitchDelegate {
+            text: i18n("Rounded corners")
+            checked: config.rounded
+            onCheckedChanged: {
+                config.rounded = checked
+            }
+        }
+
+        FormCard.FormSwitchDelegate {
             id: customBack
             text: i18n("Custom background")
             checked: config.useCustomBack

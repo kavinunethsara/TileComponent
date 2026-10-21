@@ -20,6 +20,8 @@ Rectangle {
     property var fillModes: [Image.Stretch, Image.PreserveAspectCrop, Image.PreserveAspectFit, Image.Pad]
     property var alignModes: [Qt.AlignLeft, Qt.AlignHCenter, Qt.AlignRight]
 
+    radius: metadata.rounded ? Kirigami.Units.mediumSpacing : 0
+
     Plasma5Support.DataSource {
         id: executable
         engine: "executable"
